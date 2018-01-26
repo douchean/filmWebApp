@@ -21,14 +21,14 @@ import com.endava.movies.exceptions.AlreadyExisting;
 import com.endava.movies.exceptions.InvalidException;
 import com.endava.movies.exceptions.NoData;
 import com.endava.movies.exceptions.NotExisting;
-import com.endava.movies.service.ActorService;
+import com.endava.movies.shells.ActorServing;
 
 @RestController
 @RequestMapping(value = "/actors")
 public class ActorController {
 
 	@Autowired
-	private ActorService actorService;
+	private ActorServing actorService;
 
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(method = RequestMethod.GET)

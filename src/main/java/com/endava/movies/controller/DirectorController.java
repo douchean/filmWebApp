@@ -23,14 +23,14 @@ import com.endava.movies.exceptions.AlreadyExisting;
 import com.endava.movies.exceptions.InvalidException;
 import com.endava.movies.exceptions.NoData;
 import com.endava.movies.exceptions.NotExisting;
-import com.endava.movies.service.DirectorService;
+import com.endava.movies.shells.DirectorServing;
 
 @RestController
 @RequestMapping(value = "/directors")
 public class DirectorController {
 
 	@Autowired
-	private DirectorService directorService;
+	private DirectorServing directorService;
 
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(method = RequestMethod.GET)

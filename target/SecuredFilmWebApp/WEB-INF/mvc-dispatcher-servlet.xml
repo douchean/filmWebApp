@@ -15,10 +15,10 @@
 	<context:component-scan base-package="com.endava.movies.data.repository" />
 	<context:component-scan base-package="com.endava.movies.service" />
 	<context:component-scan base-package="com.endava.movies.controller" />
-	
+
 	<context:component-scan base-package="com.endava.movies.aspect" />
 	<context:annotation-config />
-	
+
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
 	<aop:config proxy-target-class="true" />
 	<bean id="filmAspect" class="com.endava.movies.aspect.LoggingFilmAspect">
@@ -38,24 +38,13 @@
 
 
 	<!-- <tx:annotation-driven /> -->
-	<mvc:annotation-driven
-		content-negotiation-manager="contentNegotiationManager">
-		<mvc:path-matching registered-suffixes-only="true" />
-	</mvc:annotation-driven>
+	<mvc:annotation-driven/>
 
 
-	<bean id="contentNegotiationManager"
-		class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-		<property name="favorPathExtension" value="true" />
-		<property name="ignoreAcceptHeader" value="true" />
-		<property name="useJaf" value="false" />
-		<property name="defaultContentType" value="application/json" />
-		<property name="mediaTypes">
-			<map>
-				<entry key="json" value="application/json" />
-				<entry key="xml" value="application/xml" />
-			</map>
-		</property>
-	</bean>
-
+	<!-- <tx:annotation-driven /> <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean"> 
+		<property name="favorPathExtension" value="true" /> <property name="ignoreAcceptHeader" 
+		value="true" /> <property name="useJaf" value="false" /> <property name="defaultContentType" 
+		value="application/json" /> <property name="mediaTypes"> <map> <entry key="json" 
+		value="application/json" /> <entry key="xml" value="application/xml" /> </map> 
+		</property> </bean> -->
 </beans>

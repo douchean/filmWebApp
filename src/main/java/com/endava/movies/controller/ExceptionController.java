@@ -4,11 +4,13 @@ import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.endava.movies.data.dto.ExceptionDTO;
 import com.endava.movies.exceptions.AlreadyExisting;
@@ -29,11 +31,25 @@ public class ExceptionController {
 		return new ExceptionDTO(e.getMsg(), e.getCode());
 	}
 
+	@ExceptionHandler(value = AccessDeniedException.class)
+	@ResponseStatus(value = HttpStatus.FORBIDDEN)
+	protected ExceptionDTO handleAccessDenied(AccessDeniedException e) {
+		logger.warn(e);
+		return new ExceptionDTO("Access denied", 403);
+	}
+
+	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	protected ExceptionDTO handleAccessDenied(MethodArgumentTypeMismatchException e) {
+		logger.warn(e);
+		return new ExceptionDTO("Bad Request", 406);
+	}
+
 	@ExceptionHandler(value = SQLException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	@ResponseBody
 	protected ExceptionDTO handleSQLException(SQLException e) {
-		logger.error("SQL Exception ocuured.. ");
+		logger.error("SQL Exception ocuured.. " + e);
 		return new ExceptionDTO("Server error", e.getErrorCode());
 	}
 

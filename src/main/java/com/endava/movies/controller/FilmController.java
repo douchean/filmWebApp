@@ -22,14 +22,14 @@ import com.endava.movies.exceptions.AlreadyExisting;
 import com.endava.movies.exceptions.InvalidException;
 import com.endava.movies.exceptions.NoData;
 import com.endava.movies.exceptions.NotExisting;
-import com.endava.movies.service.FilmService;
+import com.endava.movies.shells.FilmServing;
 
 @RestController
 @RequestMapping("/films")
 public class FilmController {
 
 	@Autowired
-	private FilmService filmService;
+	private FilmServing filmService;
 
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(method = RequestMethod.GET)
