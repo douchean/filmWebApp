@@ -26,7 +26,6 @@ import com.endava.movies.exceptions.NoData;
 import com.endava.movies.exceptions.NotExisting;
 import com.endava.movies.shells.ActorServing;
 import com.endava.movies.utils.SortFields;
-import com.endava.movies.utils.Validator;
 
 @Service
 public class ActorService implements ActorServing {
@@ -55,11 +54,8 @@ public class ActorService implements ActorServing {
 	@Transactional
 	public void newActor(ActorExtendedDTO actorDTO)
 			throws SQLException, AlreadyExisting, InvalidException, NotExisting {
-		String name = actorDTO.getName();
-		int birth = actorDTO.getBirth();
-		Validator.newActorValidator(name, birth, actorRepository.existsByName(name));
 
-		Actor actor = new Actor(name, birth);
+		Actor actor = new Actor(actorDTO.getName(), actorDTO.getBirth());
 		List<FilmDTO> movies = actorDTO.getFilms();
 		Session session = sessionFactory.getCurrentSession();
 		if (movies != null) {
@@ -136,15 +132,12 @@ public class ActorService implements ActorServing {
 		String name = actorDTO.getName();
 		int birth = actorDTO.getBirth();
 		List<FilmDTO> movies = actorDTO.getFilms();
-		Validator.validateBirth(birth);
 
 		if (birth != 0)
 			actor.setBirth(birth);
-		if (name != null) {
-			if (actorRepository.existsByName(name))
-				throw new AlreadyExisting("Actor named " + name + " already exists!");
+		if (name != null)
 			actor.setName(name);
-		}
+
 		if (movies != null) {
 			Set<Film> setFilm = new HashSet<Film>(0);
 			for (FilmDTO f : movies) {

@@ -15,7 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import com.endava.movies.annotations.UniqueActor;
+import com.endava.movies.annotations.Year;
 import com.endava.movies.data.dto.ActorDTO;
 import com.endava.movies.data.dto.ActorExtendedDTO;
 
@@ -62,7 +65,12 @@ public class Actor {
 		return idActor;
 	}
 
+	// VALIDUCIs are used to format the validation messages in
+	// ConstraintViolationException so we can
+	// control the message that users receive when such exceptions occur
 	@Column(name = "name")
+	@NotNull(message = "VALIDUCI1 Actor's name missing!! VALIDUCI2")
+	@UniqueActor(message = "VALIDUCI1 Actor's name already exists!! VALIDUCI2")
 	public String getName() {
 		return name;
 	}
@@ -72,6 +80,7 @@ public class Actor {
 	}
 
 	@Column(name = "birth")
+	@Year(message = "VALIDUCI1 The year you entered is unlikely to be the birth year of any actor!! VALIDUCI2")
 	public Integer getBirth() {
 		return birth;
 	}
@@ -98,10 +107,8 @@ public class Actor {
 
 	public static List<ActorDTO> convertList(List<Actor> list) {
 		List<ActorDTO> listDTO = new ArrayList<ActorDTO>();
-		for (Actor a : list) {
-			ActorDTO actor = a.convert();
-			listDTO.add(actor);
-		}
+		list.forEach(a -> listDTO.add(a.convert()));
+
 		return listDTO;
 	}
 

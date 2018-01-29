@@ -3,8 +3,6 @@ package com.endava.movies.controller;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,23 +38,20 @@ public class DirectorController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "{directorId}", method = RequestMethod.GET, produces = { "application/xml",
-			"application/json" })
+	@RequestMapping(value = "{directorId}", method = RequestMethod.GET)
 	public DirectorExtendedDTO getDirector(@PathVariable int directorId) throws SQLException, NotExisting {
 		return directorService.getDirector(directorId);
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(method = RequestMethod.POST, produces = { "application/xml", "application/json" }, consumes = {
-			"application/xml", "application/json" })
+	@RequestMapping(method = RequestMethod.POST)
 	public void addDirector(@RequestBody DirectorExtendedDTO director)
 			throws AlreadyExisting, InvalidException, SQLException, NotExisting {
 		directorService.newDirector(director);
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "{id}/films", method = RequestMethod.GET, produces = { "application/xml",
-			"application/json" })
+	@RequestMapping(value = "{id}/films", method = RequestMethod.GET)
 	public List<FilmDTO> getFilms(@PathVariable int id) throws NotExisting, SQLException, NoData {
 		return directorService.selectMovies(id);
 	}
@@ -68,8 +63,6 @@ public class DirectorController {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@Produces({ "application/xml", "application/json" })
-	@Consumes({ "application/xml", "application/json" })
 	@RequestMapping(method = RequestMethod.PUT, value = "{id}")
 	public void updateDirector(@RequestBody DirectorExtendedDTO director, @PathVariable int id)
 			throws InvalidException, SQLException, AlreadyExisting, NotExisting, NoData {

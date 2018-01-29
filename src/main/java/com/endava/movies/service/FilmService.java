@@ -14,13 +14,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.endava.movies.data.bean.Actor;
+import com.endava.movies.data.bean.Comment;
 import com.endava.movies.data.bean.Director;
 import com.endava.movies.data.bean.Film;
 import com.endava.movies.data.dto.ActorDTO;
+import com.endava.movies.data.dto.CommentDTO;
 import com.endava.movies.data.dto.DirectorDTO;
 import com.endava.movies.data.dto.FilmDTO;
 import com.endava.movies.data.dto.FilmExtendedDTO;
 import com.endava.movies.data.repository.ActorRepository;
+import com.endava.movies.data.repository.CommentRepository;
 import com.endava.movies.data.repository.DirectorRepository;
 import com.endava.movies.data.repository.FilmRepository;
 import com.endava.movies.exceptions.AlreadyExisting;
@@ -46,6 +49,9 @@ public class FilmService implements FilmServing {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	@Autowired
+	private CommentRepository commentRepository;
+
 	@Override
 	@Transactional
 	public FilmExtendedDTO getFilm(int filmid) throws NotExisting, SQLException {
@@ -60,12 +66,7 @@ public class FilmService implements FilmServing {
 	@Override
 	@Transactional
 	public void newFilm(FilmExtendedDTO filmDTO) throws AlreadyExisting, InvalidException, SQLException {
-		String title = filmDTO.getTitle();
-		int year = filmDTO.getYear();
-		Boolean exists = filmRepository.existsByTitle(title);
-		Validator.newFilmValidator(title, year, exists);
-
-		Film film = new Film(title, year);
+		Film film = new Film(filmDTO.getTitle(), filmDTO.getYear());
 		Session session = sessionFactory.getCurrentSession();
 
 		List<ActorDTO> actors = filmDTO.getActors();
@@ -151,14 +152,10 @@ public class FilmService implements FilmServing {
 		Film film = session.get(Film.class, id);
 		String title = filmExtendedDTO.getTitle();
 		int year = filmExtendedDTO.getYear();
-		Validator.validateYear(year);
 		if (year != 0)
 			film.setYear(year);
-		if (title != null) {
-			if (filmRepository.existsByTitle(title))
-				throw new AlreadyExisting("Film titled " + title + " already exists!");
+		if (title != null)
 			film.setTitle(title);
-		}
 
 		List<ActorDTO> actors = filmExtendedDTO.getActors();
 		if (actors != null) {
@@ -261,6 +258,15 @@ public class FilmService implements FilmServing {
 
 		Session session = sessionFactory.getCurrentSession();
 		return Actor.convertList(new ArrayList<Actor>(session.get(Film.class, id).getActors()));
+	}
+
+	@Override
+	@Transactional
+	public List<CommentDTO> selectComments(int id) throws NotExisting {
+		if (!filmRepository.exists(id))
+			throw new NotExisting("There is not a movie with id " + id);
+
+		return Comment.convertList(commentRepository.findByIdFilm(String.valueOf(id)));
 	}
 
 	@Override

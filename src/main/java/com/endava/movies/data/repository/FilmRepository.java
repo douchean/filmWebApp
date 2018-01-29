@@ -2,9 +2,11 @@ package com.endava.movies.data.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import com.endava.movies.data.bean.Film;
 
+@Repository
 public interface FilmRepository extends JpaRepository<Film, Integer> {
 
 	public Film findByIdFilm(int filmid);

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.endava.movies.data.dto.ActorDTO;
+import com.endava.movies.data.dto.CommentDTO;
 import com.endava.movies.data.dto.DirectorDTO;
 import com.endava.movies.data.dto.FilmDTO;
 import com.endava.movies.data.dto.FilmExtendedDTO;
@@ -54,6 +55,12 @@ public class FilmController {
 	@RequestMapping(value = "{id}/actors", method = RequestMethod.GET)
 	public List<ActorDTO> getActors(@PathVariable int id) throws NoData, NotExisting, SQLException {
 		return filmService.selectActors(id);
+	}
+
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
+	public List<CommentDTO> getComments(@PathVariable int id) throws NoData, NotExisting, SQLException {
+		return filmService.selectComments(id);
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)

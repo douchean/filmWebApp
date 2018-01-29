@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.endava.movies.data.dto.ActorDTO;
+import com.endava.movies.data.dto.CommentDTO;
 import com.endava.movies.data.dto.DirectorDTO;
 import com.endava.movies.data.dto.FilmDTO;
 import com.endava.movies.data.dto.FilmExtendedDTO;
@@ -33,5 +34,7 @@ public interface FilmServing {
 	public List<DirectorDTO> selectDirectors(int id) throws NoData, NotExisting, SQLException;
 
 	public List<ActorDTO> selectActors(int id) throws NoData, NotExisting, SQLException;
+
+	public List<CommentDTO> selectComments(int id) throws NotExisting;
 
 }

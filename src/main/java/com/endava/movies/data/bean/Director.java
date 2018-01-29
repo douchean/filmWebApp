@@ -16,7 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
+import com.endava.movies.annotations.UniqueDirector;
+import com.endava.movies.annotations.Year;
 import com.endava.movies.data.dto.DirectorDTO;
 import com.endava.movies.data.dto.DirectorExtendedDTO;
 
@@ -33,7 +36,6 @@ public class Director {
 	}
 
 	public Director(String name, Integer birth, Set<Film> films) {
-		super();
 		this.name = name;
 		this.birth = birth;
 		this.films = films;
@@ -52,11 +54,14 @@ public class Director {
 	}
 
 	@Column(name = "name")
+	@NotNull(message = "VALIDUCI1 Director's name missing!! VALIDUCI2")
+	@UniqueDirector(message = "VALIDUCI1 Director's name already exists!! VALIDUCI2")
 	public String getName() {
 		return name;
 	}
 
 	@Column(name = "birth")
+	@Year(message = "VALIDUCI1 The year you entered is unlikely to be the birth year of any director!! VALIDUCI2")
 	public Integer getBirth() {
 		return birth;
 	}
@@ -96,10 +101,8 @@ public class Director {
 
 	public static List<DirectorDTO> convertList(List<Director> list) {
 		List<DirectorDTO> listDTO = new ArrayList<DirectorDTO>();
-		for (Director a : list) {
-			DirectorDTO director = a.convert();
-			listDTO.add(director);
-		}
+		list.forEach(d -> listDTO.add(d.convert()));
+
 		return listDTO;
 	}
 

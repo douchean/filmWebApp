@@ -18,7 +18,10 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
+import com.endava.movies.annotations.UniqueFilm;
+import com.endava.movies.annotations.Year;
 import com.endava.movies.data.dto.FilmDTO;
 import com.endava.movies.data.dto.FilmExtendedDTO;
 
@@ -86,11 +89,14 @@ public class Film {
 	}
 
 	@Column(name = "title")
+	@NotNull(message = "VALIDUCI1 Movie title missing!! VALIDUCI2")
+	@UniqueFilm(message = "VALIDUCI1 Movie title already exists!! VALIDUCI2")
 	public String getTitle() {
 		return title;
 	}
 
 	@Column(name = "year")
+	@Year(message = "VALIDUCI1 The year you entered is unlikely the release year of any movie!! VALIDUCI2")
 	public Integer getYear() {
 		return year;
 	}
@@ -156,10 +162,8 @@ public class Film {
 
 	public static List<FilmDTO> convertList(List<Film> list) {
 		List<FilmDTO> listDTO = new ArrayList<FilmDTO>();
-		for (Film f : list) {
-			FilmDTO film = f.convert();
-			listDTO.add(film);
-		}
+		list.forEach(f -> listDTO.add(f.convert()));
+
 		return listDTO;
 	}
 

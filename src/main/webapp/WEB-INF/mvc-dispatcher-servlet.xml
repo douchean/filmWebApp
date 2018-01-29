@@ -17,6 +17,8 @@
 	<context:component-scan base-package="com.endava.movies.controller" />
 
 	<context:component-scan base-package="com.endava.movies.aspect" />
+	<context:component-scan base-package="com.endava.movies.validator" />
+	
 	<context:annotation-config />
 
 	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>

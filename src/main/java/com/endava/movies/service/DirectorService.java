@@ -26,7 +26,6 @@ import com.endava.movies.exceptions.NoData;
 import com.endava.movies.exceptions.NotExisting;
 import com.endava.movies.shells.DirectorServing;
 import com.endava.movies.utils.SortFields;
-import com.endava.movies.utils.Validator;
 
 @Service
 public class DirectorService implements DirectorServing {
@@ -55,11 +54,8 @@ public class DirectorService implements DirectorServing {
 	@Transactional
 	public void newDirector(DirectorExtendedDTO directorDTO)
 			throws SQLException, AlreadyExisting, InvalidException, NotExisting {
-		String name = directorDTO.getName();
-		int birth = directorDTO.getBirth();
-		Validator.newDirectorValidator(name, birth, directorRepository.existsByName(name));
 
-		Director director = new Director(name, birth);
+		Director director = new Director(directorDTO.getName(), directorDTO.getBirth());
 		List<FilmDTO> movies = directorDTO.getFilms();
 		Session session = sessionFactory.getCurrentSession();
 		if (movies != null) {
@@ -136,15 +132,12 @@ public class DirectorService implements DirectorServing {
 		String name = directorDTO.getName();
 		int birth = directorDTO.getBirth();
 		List<FilmDTO> movies = directorDTO.getFilms();
-		Validator.validateBirth(birth);
 
 		if (birth != 0)
 			director.setBirth(birth);
-		if (name != null) {
-			if (directorRepository.existsByName(name))
-				throw new AlreadyExisting("Director named " + name + " already exists!");
+		if (name != null)
 			director.setName(name);
-		}
+
 		if (movies != null) {
 			Set<Film> setFilm = new HashSet<Film>(0);
 			for (FilmDTO f : movies) {

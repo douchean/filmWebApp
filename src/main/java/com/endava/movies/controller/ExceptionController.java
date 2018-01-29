@@ -2,6 +2,8 @@ package com.endava.movies.controller;
 
 import java.sql.SQLException;
 
+import javax.validation.ConstraintViolationException;
+
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.endava.movies.data.dto.ExceptionDTO;
+import com.endava.movies.data.dto.ValidationExceptionDTO;
 import com.endava.movies.exceptions.AlreadyExisting;
 import com.endava.movies.exceptions.DataException;
 import com.endava.movies.exceptions.InvalidException;
@@ -40,7 +43,7 @@ public class ExceptionController {
 
 	@ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-	protected ExceptionDTO handleAccessDenied(MethodArgumentTypeMismatchException e) {
+	protected ExceptionDTO handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 		logger.warn(e);
 		return new ExceptionDTO("Bad Request", 406);
 	}
@@ -53,13 +56,22 @@ public class ExceptionController {
 		return new ExceptionDTO("Server error", e.getErrorCode());
 	}
 
-	@ExceptionHandler(value = Exception.class)
+	@ExceptionHandler(value = ConstraintViolationException.class)
+	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
+	@ResponseBody
+	protected ValidationExceptionDTO handleConstraintViolationException(ConstraintViolationException e) {
+		logger.warn(e);
+		return new ValidationExceptionDTO(e);
+
+	}
+
+	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	@ResponseBody
-	protected ExceptionDTO handleException(Exception e) {
+	protected ExceptionDTO handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
 		logger.error(e);
 		e.printStackTrace();
-		return new ExceptionDTO("Server error", 500);
+		return new ExceptionDTO("Http request not supported", 101);
 	}
 
 	@ExceptionHandler(value = Throwable.class)
@@ -70,13 +82,13 @@ public class ExceptionController {
 		return new ExceptionDTO("Server error", 500);
 	}
 
-	@ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+	@ExceptionHandler(value = Exception.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	@ResponseBody
-	protected ExceptionDTO handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+	protected ExceptionDTO handleException(Exception e) {
 		logger.error(e);
 		e.printStackTrace();
-		return new ExceptionDTO("Http request not supported", 101);
+		return new ExceptionDTO("Server error", 500);
 	}
 
 }
