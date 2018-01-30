@@ -57,6 +57,12 @@ public class FilmController {
 		return filmService.selectActors(id);
 	}
 
+	@ResponseStatus(HttpStatus.CREATED)
+	@RequestMapping(value = "{id}/comments", method = RequestMethod.POST)
+	public void getComments(@RequestBody CommentDTO comment, @PathVariable int id) throws NotExisting {
+		filmService.addComment(comment, id);
+	}
+
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "{id}/comments", method = RequestMethod.GET)
 	public List<CommentDTO> getComments(@PathVariable int id) throws NoData, NotExisting, SQLException {

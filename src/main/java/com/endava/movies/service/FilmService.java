@@ -137,8 +137,8 @@ public class FilmService implements FilmServing {
 			film.setNumrat(num);
 			film.setRating(currRate);
 		}
-		session.merge(film);
-		return new FilmExtendedDTO(film.convertExtended());
+		session.save(film);
+		return new FilmExtendedDTO(film.convert());
 	}
 
 	@Override
@@ -267,6 +267,15 @@ public class FilmService implements FilmServing {
 			throw new NotExisting("There is not a movie with id " + id);
 
 		return Comment.convertList(commentRepository.findByIdFilm(String.valueOf(id)));
+	}
+
+	@Override
+	@Transactional
+	public void addComment(CommentDTO comment, int id) throws NotExisting {
+		if (!filmRepository.exists(id))
+			throw new NotExisting("There is not a movie with id " + id);
+
+		commentRepository.save(new Comment(comment.getUser(), comment.getText(), String.valueOf(id)));
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public class Comment {
 	private String user;
 	private String idFilm;
 
-	protected Comment(String user, String text, String idFilm) {
+	public Comment(String user, String text, String idFilm) {
 		this.user = user;
 		this.text = text;
 		this.idFilm = idFilm;

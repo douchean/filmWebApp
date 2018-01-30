@@ -37,4 +37,6 @@ public interface FilmServing {
 
 	public List<CommentDTO> selectComments(int id) throws NotExisting;
 
+	public void addComment(CommentDTO comment, int id) throws NotExisting;
+
 }

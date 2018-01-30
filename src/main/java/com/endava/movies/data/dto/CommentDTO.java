@@ -10,6 +10,9 @@ public class CommentDTO {
 		this.text = text;
 	}
 
+	public CommentDTO() {
+	}
+
 	public String getUser() {
 		return user;
 	}
