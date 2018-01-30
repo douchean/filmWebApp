@@ -15,15 +15,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.endava.movies.annotations.UniqueActor;
 import com.endava.movies.annotations.Year;
 import com.endava.movies.data.dto.ActorDTO;
 import com.endava.movies.data.dto.ActorExtendedDTO;
 
 @Entity
-@Table(name = "actor")
+@Table(name = "actor", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
 public class Actor {
 
 	@Override
@@ -70,7 +70,6 @@ public class Actor {
 	// control the message that users receive when such exceptions occur
 	@Column(name = "name")
 	@NotNull(message = "VALIDUCI1 Actor's name missing!! VALIDUCI2")
-	@UniqueActor(message = "VALIDUCI1 Actor's name already exists!! VALIDUCI2")
 	public String getName() {
 		return name;
 	}

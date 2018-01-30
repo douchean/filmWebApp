@@ -16,15 +16,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 
-import com.endava.movies.annotations.UniqueDirector;
 import com.endava.movies.annotations.Year;
 import com.endava.movies.data.dto.DirectorDTO;
 import com.endava.movies.data.dto.DirectorExtendedDTO;
 
 @Entity
-@Table(name = "director")
+@Table(name = "director", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
 public class Director {
 
 	private Integer idDirector;
@@ -55,7 +55,6 @@ public class Director {
 
 	@Column(name = "name")
 	@NotNull(message = "VALIDUCI1 Director's name missing!! VALIDUCI2")
-	@UniqueDirector(message = "VALIDUCI1 Director's name already exists!! VALIDUCI2")
 	public String getName() {
 		return name;
 	}

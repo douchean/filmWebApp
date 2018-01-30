@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -24,7 +25,7 @@ import com.endava.movies.data.dto.FilmDTO;
 import com.endava.movies.data.dto.FilmExtendedDTO;
 
 @Entity
-@Table(name = "film")
+@Table(name = "film", uniqueConstraints = { @UniqueConstraint(columnNames = "title") })
 public class Film {
 
 	private Integer idFilm;
